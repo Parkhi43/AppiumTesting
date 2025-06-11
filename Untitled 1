@@ -1,0 +1,31 @@
+ public static void loginWithGoogle() throws InterruptedException {
+        // Wait for WebView context and switch to it
+        Set<String> contextHandles = driver.getContextHandles();
+        for (String context : contextHandles) {
+            System.out.println("Available context: " + context);
+            if (context.contains("WEBVIEW")) {
+                driver.context(context);  // Switch to WebView
+                System.out.println("Switched to WebView: " + context);
+                break;  // Exit loop once WebView is found and switched
+            }
+        }
+  
+        // Increase the timeout for element visibility in case it takes time to load
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        
+        try {
+            // Wait for the Google login button to be visible and click it
+            WebElement googleLoginBtn = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("google-login-btn")));
+            googleLoginBtn.click();
+            System.out.println("Google login button clicked");
+
+            // Wait for the account selection container and click it
+            WebElement accountSelect = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//android.widget.LinearLayout[@resource-id='com.google.android.gms:id/container']")));
+            accountSelect.click();
+            System.out.println("Account selected");
+            
+            
+        } catch (Exception e) {
+            System.out.println("Error occurred during Google login process: " + e.getMessage());
+        }
+    }
